@@ -6,7 +6,7 @@ from .forms import ProjectForm
 
 @login_required
 def project_list(request):
-    if request.user.role == 'admin':
+    if request.user.is_superuser or request.user.role == 'admin':
         projects = Project.objects.all()
     else:
         projects = request.user.assigned_projects.all()
@@ -19,7 +19,7 @@ def project_list(request):
 
 @login_required
 def create_project(request):
-    if request.user.role != 'admin':
+    if not (request.user.is_superuser or request.user.role == 'admin'):
         return redirect('project_list')
 
     form = ProjectForm()
@@ -41,7 +41,7 @@ def create_project(request):
 
 @login_required
 def delete_project(request, pk):
-    if request.user.role != 'admin':
+    if not (request.user.is_superuser or request.user.role == 'admin'):
         return redirect('project_list')
 
     project = get_object_or_404(Project, id=pk)

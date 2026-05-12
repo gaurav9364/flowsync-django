@@ -7,7 +7,7 @@ from .forms import TaskForm
 
 @login_required
 def task_list(request):
-    if request.user.role == 'admin':
+    if request.user.is_superuser or request.user.role == 'admin':
         tasks = Task.objects.all()
     else:
         tasks = request.user.tasks.all()
@@ -22,7 +22,7 @@ def task_list(request):
 
 @login_required
 def create_task(request):
-    if request.user.role != 'admin':
+    if not (request.user.is_superuser or request.user.role == 'admin'):
         return redirect('task_list')
 
     form = TaskForm()
@@ -46,7 +46,9 @@ def create_task(request):
 def update_task_status(request, pk):
     task = get_object_or_404(Task, id=pk)
 
-    if request.user != task.assigned_to and request.user.role != 'admin':
+    if request.user != task.assigned_to and not (
+    request.user.is_superuser or request.user.role == 'admin'
+):
         return redirect('task_list')
 
     if request.method == 'POST':
@@ -59,7 +61,7 @@ def update_task_status(request, pk):
 
 @login_required
 def delete_task(request, pk):
-    if request.user.role != 'admin':
+    if not (request.user.is_superuser or request.user.role == 'admin'):
         return redirect('task_list')
 
     task = get_object_or_404(Task, id=pk)

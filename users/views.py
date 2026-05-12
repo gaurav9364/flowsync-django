@@ -42,7 +42,7 @@ def logout_view(request):
 
 @login_required
 def dashboard_view(request):
-    if request.user.role == 'admin':
+    if request.user.is_superuser or request.user.role == 'admin':
         total_projects = Project.objects.count()
         total_tasks = Task.objects.count()
         completed_tasks = Task.objects.filter(

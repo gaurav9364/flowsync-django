@@ -2,39 +2,46 @@
 
 {% block content %}
 
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="page-title">Dashboard</h1>
+        <p class="text-muted mb-0">Monitor projects, tasks and overall team productivity</p>
+    </div>
+</div>
+
 <div class="row g-4">
 
     <div class="col-md-3">
-        <div class="card shadow">
+        <div class="card stats-card p-3">
             <div class="card-body">
-                <h5>Total Projects</h5>
+                <h6 class="text-muted">Total Projects</h6>
                 <h2>{{ total_projects }}</h2>
             </div>
         </div>
     </div>
 
     <div class="col-md-3">
-        <div class="card shadow">
+        <div class="card stats-card p-3">
             <div class="card-body">
-                <h5>Total Tasks</h5>
+                <h6 class="text-muted">Total Tasks</h6>
                 <h2>{{ total_tasks }}</h2>
             </div>
         </div>
     </div>
 
     <div class="col-md-3">
-        <div class="card shadow">
+        <div class="card stats-card p-3">
             <div class="card-body">
-                <h5>Completed</h5>
+                <h6 class="text-muted">Completed Tasks</h6>
                 <h2>{{ completed_tasks }}</h2>
             </div>
         </div>
     </div>
 
     <div class="col-md-3">
-        <div class="card shadow">
+        <div class="card stats-card p-3">
             <div class="card-body">
-                <h5>Overdue</h5>
+                <h6 class="text-muted">Overdue Tasks</h6>
                 <h2>{{ overdue_tasks }}</h2>
             </div>
         </div>
@@ -42,14 +49,11 @@
 
 </div>
 
-<div class="mt-4">
-    <a href="{% url 'project_list' %}" class="btn btn-dark me-2">
-        Projects
+<div class="mt-5 d-flex gap-3">
+    <a href="{% url 'project_list' %}" class="btn btn-dark px-4">
+        Manage Projects
     </a>
 
-    <a href="{% url 'task_list' %}" class="btn btn-primary">
-        Tasks
-    </a>
-</div>
-
+    <a href="{% url 'task_list' %}" class="btn btn-primary px-4">
+        Manage Tasks
 {% endblock %}
