@@ -2,7 +2,11 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout
 from django.contrib.auth.views import LoginView
 from django.contrib.auth.decorators import login_required
+from django.utils.timezone import now
+
 from .forms import SignupForm
+from tasks.models import Task
+from projects.models import Project
 
 
 def signup_view(request):
@@ -13,6 +17,7 @@ def signup_view(request):
 
     if request.method == 'POST':
         form = SignupForm(request.POST)
+
         if form.is_valid():
             user = form.save()
             login(request, user)
@@ -21,18 +26,8 @@ def signup_view(request):
     context = {
         'form': form
     }
+
     return render(request, 'users/signup.html', context)
-
-
-@login_required
-def dashboard_view(request):
-    total_projects = request.user.assigned_projects.count()
-
-    context = {
-        'total_projects': total_projects
-    }
-
-    return render(request, 'users/dashboard.html', context)
 
 
 class CustomLoginView(LoginView):
@@ -43,3 +38,46 @@ class CustomLoginView(LoginView):
 def logout_view(request):
     logout(request)
     return redirect('login')
+
+
+@login_required
+def dashboard_view(request):
+    if request.user.role == 'admin':
+        total_projects = Project.objects.count()
+        total_tasks = Task.objects.count()
+        completed_tasks = Task.objects.filter(
+            status='completed'
+        ).count()
+
+        overdue_tasks = Task.objects.filter(
+            due_date__lt=now().date()
+        ).exclude(
+            status='completed'
+        ).count()
+
+    else:
+        total_projects = request.user.assigned_projects.count()
+        total_tasks = request.user.tasks.count()
+
+        completed_tasks = request.user.tasks.filter(
+            status='completed'
+        ).count()
+
+        overdue_tasks = request.user.tasks.filter(
+            due_date__lt=now().date()
+        ).exclude(
+            status='completed'
+        ).count()
+
+    context = {
+        'total_projects': total_projects,
+        'total_tasks': total_tasks,
+        'completed_tasks': completed_tasks,
+        'overdue_tasks': overdue_tasks,
+    }
+
+    return render(
+        request,
+        'users/dashboard.html',
+        context
+    )

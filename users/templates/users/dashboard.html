@@ -2,13 +2,40 @@
 
 {% block content %}
 
-<div class="row">
+<div class="row g-4">
 
-    <div class="col-md-4">
+    <div class="col-md-3">
         <div class="card shadow">
             <div class="card-body">
-                <h4>Total Projects</h4>
+                <h5>Total Projects</h5>
                 <h2>{{ total_projects }}</h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card shadow">
+            <div class="card-body">
+                <h5>Total Tasks</h5>
+                <h2>{{ total_tasks }}</h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card shadow">
+            <div class="card-body">
+                <h5>Completed</h5>
+                <h2>{{ completed_tasks }}</h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card shadow">
+            <div class="card-body">
+                <h5>Overdue</h5>
+                <h2>{{ overdue_tasks }}</h2>
             </div>
         </div>
     </div>
@@ -16,8 +43,12 @@
 </div>
 
 <div class="mt-4">
-    <a href="{% url 'project_list' %}" class="btn btn-dark">
-        View Projects
+    <a href="{% url 'project_list' %}" class="btn btn-dark me-2">
+        Projects
+    </a>
+
+    <a href="{% url 'task_list' %}" class="btn btn-primary">
+        Tasks
     </a>
 </div>
 
