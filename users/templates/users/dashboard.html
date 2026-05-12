@@ -2,9 +2,23 @@
 
 {% block content %}
 
-<div class="text-center">
-    <h1>Dashboard</h1>
-    <p>Login successful. Project setup is working correctly.</p>
+<div class="row">
+
+    <div class="col-md-4">
+        <div class="card shadow">
+            <div class="card-body">
+                <h4>Total Projects</h4>
+                <h2>{{ total_projects }}</h2>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="mt-4">
+    <a href="{% url 'project_list' %}" class="btn btn-dark">
+        View Projects
+    </a>
 </div>
 
 {% endblock %}
