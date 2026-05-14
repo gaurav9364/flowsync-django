@@ -8,6 +8,11 @@ from .forms import SignupForm
 from tasks.models import Task
 from projects.models import Project
 
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from .serializers import UserSerializer
+from .models import User
+
 
 def signup_view(request):
     if request.user.is_authenticated:
@@ -81,3 +86,9 @@ def dashboard_view(request):
         'users/dashboard.html',
         context
     )
+
+@api_view(['GET'])
+def user_api(request):
+    users = User.objects.all()
+    serializer = UserSerializer(users, many=True)
+    return Response(serializer.data)

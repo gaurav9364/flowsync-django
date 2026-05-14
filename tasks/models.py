@@ -55,3 +55,15 @@ class Task(models.Model):
 
     def __str__(self):
         return self.title
+    
+
+    solution_file = models.FileField(
+    upload_to='task_solutions/',
+    blank=True,
+    null=True
+)
+
+submitted_at = models.DateTimeField(
+    blank=True,
+    null=True
+)

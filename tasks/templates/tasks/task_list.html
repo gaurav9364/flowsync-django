@@ -3,22 +3,27 @@
 {% block content %}
 
 <div class="d-flex justify-content-between align-items-center mb-4">
-    <h2>Tasks</h2>
+    <div>
+        <h1 class="page-title">Tasks</h1>
+        <p class="text-muted mb-0">
+            Track assignments, priorities and deadlines
+        </p>
+    </div>
 
     {% if user.is_superuser or user.role == 'admin' %}
-        <a href="{% url 'create_task' %}" class="btn btn-dark">
-            Create Task
+        <a href="{% url 'create_task' %}" class="btn btn-dark px-4">
+            + Create Task
         </a>
     {% endif %}
 </div>
 
-<div class="card shadow">
-    <div class="card-body">
+<div class="card main-card">
+    <div class="card-body p-4">
 
-        <table class="table">
+        <table class="table align-middle">
             <thead>
                 <tr>
-                    <th>Title</th>
+                    <th>Task</th>
                     <th>Project</th>
                     <th>Assigned To</th>
                     <th>Due Date</th>
@@ -34,19 +39,30 @@
             <tbody>
                 {% for task in tasks %}
                 <tr>
-                    <td>{{ task.title }}</td>
+
+                    <!-- Clickable Task Title -->
+                    <td>
+                        <a href="{% url 'task_detail' task.id %}"
+                           class="text-decoration-none fw-bold">
+                            {{ task.title }}
+                        </a>
+                    </td>
+
                     <td>{{ task.project.name }}</td>
+
                     <td>{{ task.assigned_to.username }}</td>
+
                     <td>
                         {{ task.due_date }}
 
                         {% if task.due_date < today and task.status != 'completed' %}
-                            <span class="badge bg-danger">
+                            <span class="badge bg-danger ms-2">
                                 Overdue
                             </span>
                         {% endif %}
                     </td>
 
+                    <!-- Status Update -->
                     <td>
                         <form method="POST"
                               action="{% url 'update_task_status' task.id %}">
@@ -54,7 +70,7 @@
 
                             <select name="status"
                                     onchange="this.form.submit()"
-                                    class="form-select">
+                                    class="form-select form-select-sm">
 
                                 <option value="pending"
                                 {% if task.status == 'pending' %}selected{% endif %}>
@@ -75,16 +91,44 @@
                         </form>
                     </td>
 
-                    <td>{{ task.priority }}</td>
+                    <!-- Priority Badge -->
+                    <td>
+                        {% if task.priority == 'high' %}
+                            <span class="badge-high">High</span>
 
+                        {% elif task.priority == 'medium' %}
+                            <span class="badge-medium">Medium</span>
+
+                        {% else %}
+                            <span class="badge-low">Low</span>
+                        {% endif %}
+                    </td>
+
+                    <!-- Admin Actions -->
                     {% if user.is_superuser or user.role == 'admin' %}
                     <td>
-                        <a href="{% url 'delete_task' task.id %}"
-                           class="btn btn-danger btn-sm">
-                           Delete
+
+                        <a href="{% url 'edit_task' task.id %}"
+                           class="btn btn-sm btn-outline-dark">
+                            Edit
                         </a>
+
+                        <a href="{% url 'delete_task' task.id %}"
+                           class="btn btn-sm btn-danger">
+                            Delete
+                        </a>
+
                     </td>
                     {% endif %}
+
+                </tr>
+
+                {% empty %}
+                <tr>
+                    <td colspan="7"
+                        class="text-center text-muted py-4">
+                        No tasks created yet.
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>

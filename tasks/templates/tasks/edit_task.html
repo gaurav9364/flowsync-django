@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="row justify-content-center">
+    <div class="col-md-8">
+
+        <div class="card main-card">
+            <div class="card-body p-4">
+
+                <h2 class="page-title mb-4">
+                    Edit Task
+                </h2>
+
+                <form method="POST">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+
+                    <button class="btn btn-dark">
+                        Save Changes
+                    </button>
+
+                    <a href="{% url 'task_list' %}"
+                       class="btn btn-outline-secondary">
+                        Cancel
+                    </a>
+                </form>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}

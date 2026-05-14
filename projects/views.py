@@ -3,6 +3,10 @@ from django.contrib.auth.decorators import login_required
 from .models import Project
 from .forms import ProjectForm
 
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from .serializers import ProjectSerializer
+
 
 @login_required
 def project_list(request):
@@ -47,3 +51,9 @@ def delete_project(request, pk):
     project = get_object_or_404(Project, id=pk)
     project.delete()
     return redirect('project_list')
+
+@api_view(['GET'])
+def project_api(request):
+    projects = Project.objects.all()
+    serializer = ProjectSerializer(projects, many=True)
+    return Response(serializer.data)

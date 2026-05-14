@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="row justify-content-center">
+    <div class="col-md-9">
+
+        <div class="card main-card">
+            <div class="card-body p-4">
+
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div>
+                        <h2 class="page-title">{{ task.title }}</h2>
+                        <p class="text-muted mb-0">
+                            Project: {{ task.project.name }}
+                        </p>
+                    </div>
+
+                    {% if user.is_superuser or user.role == 'admin' %}
+                        <a href="{% url 'edit_task' task.id %}"
+                           class="btn btn-dark">
+                           Edit Task
+                        </a>
+                    {% endif %}
+                </div>
+
+                <hr>
+
+                <h5 class="mb-3">Problem Statement</h5>
+
+                <div class="mb-4">
+                    <p>{{ task.description }}</p>
+                </div>
+
+                <div class="row mb-4">
+
+                    <div class="col-md-4">
+                        <strong>Due Date:</strong><br>
+                        {{ task.due_date }}
+                    </div>
+
+                    <div class="col-md-4">
+                        <strong>Priority:</strong><br>
+
+                        {% if task.priority == 'high' %}
+                            <span class="badge-high">High</span>
+                        {% elif task.priority == 'medium' %}
+                            <span class="badge-medium">Medium</span>
+                        {% else %}
+                            <span class="badge-low">Low</span>
+                        {% endif %}
+                    </div>
+
+                    <div class="col-md-4">
+                        <strong>Status:</strong><br>
+                        {{ task.status }}
+                    </div>
+
+                </div>
+
+                <hr>
+
+                <h5 class="mb-3">Upload Solution</h5>
+
+                <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+
+                    <button class="btn btn-primary">
+                        Upload Solution
+                    </button>
+                </form>
+
+                {% if task.solution_file %}
+                <div class="mt-4">
+                    <strong>Current Submission:</strong><br>
+
+                    <a href="{{ task.solution_file.url }}"
+                       target="_blank"
+                       class="btn btn-outline-dark btn-sm mt-2">
+                        View Uploaded File
+                    </a>
+
+                    {% if task.submitted_at %}
+                    <p class="text-muted mt-2">
+                        Submitted on:
+                        {{ task.submitted_at }}
+                    </p>
+                    {% endif %}
+                </div>
+                {% endif %}
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}
