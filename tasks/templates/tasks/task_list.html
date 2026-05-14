@@ -40,7 +40,6 @@
                 {% for task in tasks %}
                 <tr>
 
-                    <!-- Clickable Task Title -->
                     <td>
                         <a href="{% url 'task_detail' task.id %}"
                            class="text-decoration-none fw-bold">
@@ -62,36 +61,32 @@
                         {% endif %}
                     </td>
 
-                    <!-- Status Update -->
+                    <!-- STATUS DISPLAY ONLY -->
                     <td>
-                        <form method="POST"
-                              action="{% url 'update_task_status' task.id %}">
-                            {% csrf_token %}
 
-                            <select name="status"
-                                    onchange="this.form.submit()"
-                                    class="form-select form-select-sm">
+                        {% if task.status == 'pending' %}
+                            <span class="badge bg-warning text-dark">
+                                Pending
+                            </span>
 
-                                <option value="pending"
-                                {% if task.status == 'pending' %}selected{% endif %}>
-                                    Pending
-                                </option>
+                        {% elif task.status == 'in_progress' %}
+                            <span class="badge bg-primary">
+                                In Progress
+                            </span>
 
-                                <option value="in_progress"
-                                {% if task.status == 'in_progress' %}selected{% endif %}>
-                                    In Progress
-                                </option>
+                        {% elif task.status == 'completed' %}
+                            <span class="badge bg-success">
+                                Completed
+                            </span>
 
-                                <option value="completed"
-                                {% if task.status == 'completed' %}selected{% endif %}>
-                                    Completed
-                                </option>
+                        {% else %}
+                            <span class="badge bg-secondary">
+                                Unknown
+                            </span>
+                        {% endif %}
 
-                            </select>
-                        </form>
                     </td>
 
-                    <!-- Priority Badge -->
                     <td>
                         {% if task.priority == 'high' %}
                             <span class="badge-high">High</span>
@@ -104,7 +99,6 @@
                         {% endif %}
                     </td>
 
-                    <!-- Admin Actions -->
                     {% if user.is_superuser or user.role == 'admin' %}
                     <td>
 
