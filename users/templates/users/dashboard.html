@@ -137,27 +137,26 @@
                 Quick Actions
             </h4>
 
-            <div class="d-grid gap-3">
-
+            {% if user.is_superuser or user.role == 'admin' %}
                 <a href="{% url 'create_project' %}"
-                   class="btn btn-dark">
-                   + New Project
+                class="btn btn-dark">
+                + New Project
                 </a>
-
+            {% endif %}
+            {% if user.is_superuser or user.role == 'admin' %}
                 <a href="{% url 'create_task' %}"
-                   class="btn btn-outline-dark">
-                   + New Task
+                class="btn btn-dark">
+                + New Task
                 </a>
+            {% endif %}
 
+            {% if user.is_superuser or user.role == 'admin' %}
                 <a href="{% url 'create_team' %}"
-                   class="btn btn-outline-dark">
-                   + New Team
+                class="btn btn-dark">
+                + New Team
                 </a>
+            {% endif %}
 
-                <a href="{% url 'profile' %}"
-                   class="btn btn-outline-dark">
-                   Profile Settings
-                </a>
 
             </div>
 

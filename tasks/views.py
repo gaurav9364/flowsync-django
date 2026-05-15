@@ -175,39 +175,6 @@ def task_api(request):
     serializer = TaskSerializer(tasks, many=True)
     return Response(serializer.data)
 
-@login_required
-def kanban_board(request):
-    if request.user.is_superuser or request.user.role == 'admin':
-        pending_tasks = Task.objects.filter(
-            status='pending'
-        )
-
-        in_progress_tasks = Task.objects.filter(
-            status='in_progress'
-        )
-
-        completed_tasks = Task.objects.filter(
-            status='completed'
-        )
-
-    else:
-        pending_tasks = request.user.tasks.filter(
-            status='pending'
-        )
-
-        in_progress_tasks = request.user.tasks.filter(
-            status='in_progress'
-        )
-
-        completed_tasks = request.user.tasks.filter(
-            status='completed'
-        )
-
-    return render(request, 'tasks/kanban.html', {
-        'pending_tasks': pending_tasks,
-        'in_progress_tasks': in_progress_tasks,
-        'completed_tasks': completed_tasks,
-    })
 
 @login_required
 def export_tasks_csv(request):
