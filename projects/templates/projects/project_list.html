@@ -3,24 +3,30 @@
 {% block content %}
 
 <div class="d-flex justify-content-between align-items-center mb-4">
-    <h2>Projects</h2>
+    <div>
+        <h1 class="page-title">Projects</h1>
+        <p class="text-muted mb-0">
+            Manage all team projects efficiently
+        </p>
+    </div>
 
     {% if user.is_superuser or user.role == 'admin' %}
-        <a href="{% url 'create_project' %}" class="btn btn-dark">
-            Create Project
+        <a href="{% url 'create_project' %}" class="btn btn-dark px-4">
+            + Create Project
         </a>
     {% endif %}
 </div>
 
-<div class="card shadow">
-    <div class="card-body">
+<div class="card main-card">
+    <div class="card-body p-4">
 
-        <table class="table">
+        <table class="table align-middle">
             <thead>
                 <tr>
-                    <th>Name</th>
-                    <th>Start</th>
-                    <th>End</th>
+                    <th>Project Name</th>
+                    <th>Description</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
 
                     {% if user.is_superuser or user.role == 'admin' %}
                         <th>Action</th>
@@ -31,18 +37,47 @@
             <tbody>
                 {% for project in projects %}
                 <tr>
-                    <td>{{ project.name }}</td>
-                    <td>{{ project.start_date }}</td>
-                    <td>{{ project.end_date }}</td>
+
+                    <td>
+                        <strong>{{ project.name }}</strong>
+                    </td>
+
+                    <td>
+                        {{ project.description }}
+                    </td>
+
+                    <td>
+                        {{ project.start_date }}
+                    </td>
+
+                    <td>
+                        {{ project.end_date }}
+                    </td>
 
                     {% if user.is_superuser or user.role == 'admin' %}
                     <td>
+
+                        <a href="{% url 'edit_project' project.id %}"
+                           class="btn btn-sm btn-outline-dark">
+                           Edit
+                        </a>
+
                         <a href="{% url 'delete_project' project.id %}"
-                           class="btn btn-danger btn-sm">
+                           class="btn btn-sm btn-danger">
                            Delete
                         </a>
+
                     </td>
                     {% endif %}
+
+                </tr>
+
+                {% empty %}
+                <tr>
+                    <td colspan="5"
+                        class="text-center text-muted py-4">
+                        No projects created yet.
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>

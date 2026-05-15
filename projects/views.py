@@ -45,6 +45,28 @@ def create_project(request):
     }
     return render(request, 'projects/create_project.html', context)
 
+@login_required
+def edit_project(request, pk):
+    if not (request.user.is_superuser or request.user.role == 'admin'):
+        return redirect('project_list')
+
+    project = get_object_or_404(Project, id=pk)
+    form = ProjectForm(instance=project)
+
+    if request.method == 'POST':
+        form = ProjectForm(
+            request.POST,
+            instance=project
+        )
+
+        if form.is_valid():
+            form.save()
+            return redirect('project_list')
+
+    return render(request, 'projects/edit_project.html', {
+        'form': form
+    })
+
 
 @login_required
 def delete_project(request, pk):

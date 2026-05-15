@@ -13,6 +13,7 @@ from .views import (
     create_team,
     delete_team,
     edit_team,
+    edit_project,
 )
 
 urlpatterns = [
@@ -24,4 +25,5 @@ urlpatterns = [
     path('teams/create/', create_team, name='create_team'),
     path('teams/delete/<int:pk>/', delete_team, name='delete_team'),
     path('teams/edit/<int:pk>/', edit_team, name='edit_team'),
+    path('edit/<int:pk>/', edit_project, name='edit_project'),
 ]
