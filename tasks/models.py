@@ -67,3 +67,31 @@ submitted_at = models.DateTimeField(
     blank=True,
     null=True
 )
+
+class TaskSubmission(models.Model):
+    task = models.ForeignKey(
+        Task,
+        on_delete=models.CASCADE,
+        related_name='submissions'
+    )
+
+    submitted_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE
+    )
+
+    solution_file = models.FileField(
+        upload_to='task_submissions/'
+    )
+
+    submitted_at = models.DateTimeField(
+        auto_now_add=True
+    )
+
+    remarks = models.TextField(
+        blank=True,
+        null=True
+    )
+
+    def __str__(self):
+        return f"{self.task.title} - {self.submitted_by.username}"

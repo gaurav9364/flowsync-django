@@ -15,6 +15,7 @@ from users.models import ActivityLog
 
 import csv
 from django.http import HttpResponse
+from .models import TaskSubmission
 
 
 @login_required
@@ -130,10 +131,17 @@ def task_detail(request, pk):
         if form.is_valid():
             task = form.save(commit=False)
 
-            # Auto update status when solution uploaded
+            # Save previous upload into history
+            if task.solution_file:
+                TaskSubmission.objects.create(
+                    task=task,
+                    submitted_by=request.user,
+                    solution_file=task.solution_file
+                )
+
+            # Replace with new upload
             task.status = 'completed'
             task.submitted_at = timezone.now()
-
             task.save()
 
             ActivityLog.objects.create(
@@ -141,11 +149,12 @@ def task_detail(request, pk):
                 action=f"Uploaded solution for task: {task.title}"
             )
 
-            return redirect('task_detail', pk=task.id)
+        return redirect('task_detail', pk=task.id)
 
     return render(request, 'tasks/task_detail.html', {
         'task': task,
-        'form': form
+        'form': form,
+        'submissions': task.submissions.all().order_by('-submitted_at')
     })
 
 
