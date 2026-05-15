@@ -7,6 +7,9 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .serializers import ProjectSerializer
 
+from .models import Team
+from .forms import TeamForm
+
 
 @login_required
 def project_list(request):
@@ -57,3 +60,48 @@ def project_api(request):
     projects = Project.objects.all()
     serializer = ProjectSerializer(projects, many=True)
     return Response(serializer.data)
+
+
+@login_required
+def team_list(request):
+    if request.user.is_superuser or request.user.role == 'admin':
+        teams = Team.objects.all()
+    else:
+        teams = request.user.teams.all()
+
+    return render(request, 'projects/team_list.html', {
+        'teams': teams
+    })
+
+
+@login_required
+def create_team(request):
+    if not (request.user.is_superuser or request.user.role == 'admin'):
+        return redirect('team_list')
+
+    form = TeamForm()
+
+    if request.method == 'POST':
+        form = TeamForm(request.POST)
+
+        if form.is_valid():
+            team = form.save(commit=False)
+            team.created_by = request.user
+            team.save()
+            form.save_m2m()
+            return redirect('team_list')
+
+    return render(request, 'projects/create_team.html', {
+        'form': form
+    })
+
+
+@login_required
+def delete_team(request, pk):
+    if not (request.user.is_superuser or request.user.role == 'admin'):
+        return redirect('team_list')
+
+    team = get_object_or_404(Team, id=pk)
+    team.delete()
+
+    return redirect('team_list')

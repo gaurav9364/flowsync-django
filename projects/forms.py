@@ -2,6 +2,8 @@ from django.contrib.auth.decorators import login_required
 from django import forms
 from .models import Project
 from users.models import User
+from .models import Team
+
 
 
 class ProjectForm(forms.ModelForm):
@@ -19,4 +21,19 @@ class ProjectForm(forms.ModelForm):
             'members',
             'start_date',
             'end_date',
+        ]
+
+class TeamForm(forms.ModelForm):
+    members = forms.ModelMultipleChoiceField(
+        queryset=User.objects.filter(role='member'),
+        widget=forms.CheckboxSelectMultiple,
+        required=False
+    )
+
+    class Meta:
+        model = Team
+        fields = [
+            'name',
+            'description',
+            'members',
         ]
