@@ -4,7 +4,7 @@ from django.contrib.auth.views import LoginView
 from django.contrib.auth.decorators import login_required
 from django.utils.timezone import now
 
-from .forms import SignupForm
+from .forms import SignupForm, ProfileForm
 from tasks.models import Task
 from projects.models import Project
 
@@ -12,6 +12,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .serializers import UserSerializer
 from .models import User
+
 
 
 def signup_view(request):
@@ -92,3 +93,31 @@ def user_api(request):
     users = User.objects.all()
     serializer = UserSerializer(users, many=True)
     return Response(serializer.data)
+
+def home_view(request):
+    if request.user.is_authenticated:
+        return redirect('dashboard')
+
+    return render(request, 'users/home.html')
+
+
+@login_required
+def profile_view(request):
+    form = ProfileForm(instance=request.user)
+
+    if request.method == 'POST':
+        form = ProfileForm(
+            request.POST,
+            instance=request.user
+        )
+
+        if form.is_valid():
+            profile = form.save(commit=False)
+            profile.updated_by = request.user.username
+            profile.save()
+
+            return redirect('profile')
+
+    return render(request, 'users/profile.html', {
+        'form': form
+    })

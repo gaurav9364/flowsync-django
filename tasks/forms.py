@@ -15,6 +15,12 @@ class TaskForm(forms.ModelForm):
         required=True
     )
 
+    widgets = {
+        'due_date': forms.DateInput(
+            attrs={'type': 'date'}
+        ),
+    }
+
     class Meta:
         model = Task
         fields = [

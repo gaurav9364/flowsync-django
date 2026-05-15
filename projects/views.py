@@ -105,3 +105,25 @@ def delete_team(request, pk):
     team.delete()
 
     return redirect('team_list')
+
+@login_required
+def edit_team(request, pk):
+    if not (request.user.is_superuser or request.user.role == 'admin'):
+        return redirect('team_list')
+
+    team = get_object_or_404(Team, id=pk)
+    form = TeamForm(instance=team)
+
+    if request.method == 'POST':
+        form = TeamForm(
+            request.POST,
+            instance=team
+        )
+
+        if form.is_valid():
+            form.save()
+            return redirect('team_list')
+
+    return render(request, 'projects/edit_team.html', {
+        'form': form
+    })

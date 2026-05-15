@@ -22,6 +22,14 @@ class ProjectForm(forms.ModelForm):
             'start_date',
             'end_date',
         ]
+        widgets = {
+            'start_date': forms.DateInput(
+                attrs={'type': 'date'}
+            ),
+            'end_date': forms.DateInput(
+                attrs={'type': 'date'}
+            ),
+        }
 
 class TeamForm(forms.ModelForm):
     members = forms.ModelMultipleChoiceField(

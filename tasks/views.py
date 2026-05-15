@@ -71,6 +71,7 @@ def edit_task(request, pk):
 def task_detail(request, pk):
     task = get_object_or_404(Task, id=pk)
 
+
     if request.user != task.assigned_to and not (
         request.user.is_superuser or request.user.role == 'admin'
     ):
@@ -87,8 +88,13 @@ def task_detail(request, pk):
 
         if form.is_valid():
             task = form.save(commit=False)
+
+            # Auto update status when solution uploaded
+            task.status = 'completed'
             task.submitted_at = timezone.now()
+
             task.save()
+
             return redirect('task_detail', pk=task.id)
 
     return render(request, 'tasks/task_detail.html', {

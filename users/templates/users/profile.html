@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="row justify-content-center">
+    <div class="col-md-8">
+
+        <div class="card main-card">
+            <div class="card-body p-4">
+
+                <h2 class="page-title mb-4">
+                    My Profile
+                </h2>
+
+                <div class="mb-4">
+                    <p>
+                        <strong>Username:</strong>
+                        {{ request.user.username }}
+                    </p>
+
+                    <p>
+                        <strong>Email:</strong>
+                        {{ request.user.email }}
+                    </p>
+
+                    <p>
+                        <strong>Role:</strong>
+                        {{ request.user.role }}
+                    </p>
+
+                    <p>
+                        <strong>Last Updated:</strong>
+                        {{ request.user.updated_at }}
+                    </p>
+                </div>
+
+                <hr>
+
+                <form method="POST">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+
+                    <button class="btn btn-dark">
+                        Save Changes
+                    </button>
+                </form>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}
