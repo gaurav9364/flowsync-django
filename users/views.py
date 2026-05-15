@@ -12,6 +12,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .serializers import UserSerializer
 from .models import User
+from .models import ActivityLog
 
 
 
@@ -120,4 +121,31 @@ def profile_view(request):
 
     return render(request, 'users/profile.html', {
         'form': form
+    })
+
+@login_required
+def notification_view(request):
+    notifications = request.user.notifications.all().order_by(
+        '-created_at'
+    )
+
+    notifications.update(is_read=True)
+
+    return render(request, 'users/notifications.html', {
+        'notifications': notifications
+    })
+
+@login_required
+def activity_view(request):
+    if request.user.is_superuser or request.user.role == 'admin':
+        activities = ActivityLog.objects.all().order_by(
+            '-created_at'
+        )
+    else:
+        activities = request.user.activities.all().order_by(
+            '-created_at'
+        )
+
+    return render(request, 'users/activity.html', {
+        'activities': activities
     })

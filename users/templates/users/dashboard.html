@@ -2,58 +2,211 @@
 
 {% block content %}
 
-<div class="d-flex justify-content-between align-items-center mb-4">
+<div class="d-flex justify-content-between align-items-center mb-5">
+
     <div>
-        <h1 class="page-title">Dashboard</h1>
-        <p class="text-muted mb-0">Monitor projects, tasks and overall team productivity</p>
+        <h1 class="page-title">
+            Dashboard Overview
+        </h1>
+
+        <p class="subtitle">
+            Monitor projects, teams, productivity and task performance
+        </p>
     </div>
+
+    <div>
+        <a href="{% url 'project_list' %}"
+           class="btn btn-dark">
+           Manage Projects
+        </a>
+    </div>
+
 </div>
+
+<!-- STATS SECTION -->
+
+<div class="row g-4 mb-5">
+
+    <div class="col-md-3">
+        <div class="card stats-card p-4">
+            <h6 class="text-muted">
+                Total Projects
+            </h6>
+
+            <h2 class="fw-bold">
+                {{ total_projects }}
+            </h2>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card stats-card p-4">
+            <h6 class="text-muted">
+                Total Tasks
+            </h6>
+
+            <h2 class="fw-bold">
+                {{ total_tasks }}
+            </h2>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card stats-card p-4">
+            <h6 class="text-muted">
+                Completed Tasks
+            </h6>
+
+            <h2 class="fw-bold">
+                {{ completed_tasks }}
+            </h2>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card stats-card p-4">
+            <h6 class="text-muted">
+                Overdue Tasks
+            </h6>
+
+            <h2 class="fw-bold text-danger">
+                {{ overdue_tasks }}
+            </h2>
+        </div>
+    </div>
+
+</div>
+
+<!-- ANALYTICS SECTION -->
 
 <div class="row g-4">
 
-    <div class="col-md-3">
-        <div class="card stats-card p-3">
-            <div class="card-body">
-                <h6 class="text-muted">Total Projects</h6>
-                <h2>{{ total_projects }}</h2>
+    <div class="col-lg-8">
+
+        <div class="card main-card p-4">
+
+            <h4 class="fw-bold mb-4">
+                Productivity Summary
+            </h4>
+
+            <div class="mb-4">
+                <label class="fw-semibold mb-2">
+                    Project Completion Progress
+                </label>
+
+                <div class="progress" style="height: 14px; border-radius: 10px;">
+                    <div class="progress-bar bg-dark"
+                         style="width: 75%;">
+                    </div>
+                </div>
             </div>
+
+            <div class="mb-4">
+                <label class="fw-semibold mb-2">
+                    Task Completion Rate
+                </label>
+
+                <div class="progress" style="height: 14px; border-radius: 10px;">
+                    <div class="progress-bar bg-success"
+                         style="width: 82%;">
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <label class="fw-semibold mb-2">
+                    Team Productivity Score
+                </label>
+
+                <div class="progress" style="height: 14px; border-radius: 10px;">
+                    <div class="progress-bar bg-primary"
+                         style="width: 88%;">
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-lg-4">
+
+        <div class="card main-card p-4">
+
+            <h4 class="fw-bold mb-4">
+                Quick Actions
+            </h4>
+
+            <div class="d-grid gap-3">
+
+                <a href="{% url 'create_project' %}"
+                   class="btn btn-dark">
+                   + New Project
+                </a>
+
+                <a href="{% url 'create_task' %}"
+                   class="btn btn-outline-dark">
+                   + New Task
+                </a>
+
+                <a href="{% url 'create_team' %}"
+                   class="btn btn-outline-dark">
+                   + New Team
+                </a>
+
+                <a href="{% url 'profile' %}"
+                   class="btn btn-outline-dark">
+                   Profile Settings
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- INSIGHTS -->
+
+<div class="row g-4 mt-4">
+
+    <div class="col-md-4">
+        <div class="card stats-card p-4">
+            <h5 class="fw-bold">
+                Smart Alerts
+            </h5>
+
+            <p class="text-muted mb-0">
+                {{ overdue_tasks }} tasks require immediate attention.
+            </p>
         </div>
     </div>
 
-    <div class="col-md-3">
-        <div class="card stats-card p-3">
-            <div class="card-body">
-                <h6 class="text-muted">Total Tasks</h6>
-                <h2>{{ total_tasks }}</h2>
-            </div>
+    <div class="col-md-4">
+        <div class="card stats-card p-4">
+            <h5 class="fw-bold">
+                Team Performance
+            </h5>
+
+            <p class="text-muted mb-0">
+                Most teams are performing above expected targets.
+            </p>
         </div>
     </div>
 
-    <div class="col-md-3">
-        <div class="card stats-card p-3">
-            <div class="card-body">
-                <h6 class="text-muted">Completed Tasks</h6>
-                <h2>{{ completed_tasks }}</h2>
-            </div>
-        </div>
-    </div>
+    <div class="col-md-4">
+        <div class="card stats-card p-4">
+            <h5 class="fw-bold">
+                Admin Efficiency
+            </h5>
 
-    <div class="col-md-3">
-        <div class="card stats-card p-3">
-            <div class="card-body">
-                <h6 class="text-muted">Overdue Tasks</h6>
-                <h2>{{ overdue_tasks }}</h2>
-            </div>
+            <p class="text-muted mb-0">
+                Task assignment and project workflow optimized.
+            </p>
         </div>
     </div>
 
 </div>
 
-<div class="mt-5 d-flex gap-3">
-    <a href="{% url 'project_list' %}" class="btn btn-dark px-4">
-        Manage Projects
-    </a>
-
-    <a href="{% url 'task_list' %}" class="btn btn-primary px-4">
-        Manage Tasks
 {% endblock %}

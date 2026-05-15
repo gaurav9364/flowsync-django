@@ -10,6 +10,12 @@ from .models import Task
 from .forms import TaskForm, SolutionUploadForm
 from .serializers import TaskSerializer
 
+from users.models import Notification
+from users.models import ActivityLog
+
+import csv
+from django.http import HttpResponse
+
 
 @login_required
 def task_list(request):
@@ -18,12 +24,35 @@ def task_list(request):
     else:
         tasks = request.user.tasks.all()
 
+    search_query = request.GET.get('search')
+    status_filter = request.GET.get('status')
+    priority_filter = request.GET.get('priority')
+
+    if search_query:
+        tasks = tasks.filter(
+            title__icontains=search_query
+        )
+
+    if status_filter:
+        tasks = tasks.filter(
+            status=status_filter
+        )
+
+    if priority_filter:
+        tasks = tasks.filter(
+            priority=priority_filter
+        )
+
     context = {
         'tasks': tasks,
         'today': now().date()
     }
 
-    return render(request, 'tasks/task_list.html', context)
+    return render(
+        request,
+        'tasks/task_list.html',
+        context
+    )
 
 
 @login_required
@@ -40,6 +69,18 @@ def create_task(request):
             task = form.save(commit=False)
             task.created_by = request.user
             task.save()
+
+            ActivityLog.objects.create(
+                user=request.user,
+                action=f"Created task: {task.title}"
+            )
+
+            Notification.objects.create(
+                user=task.assigned_to,
+                title="New Task Assigned",
+                message=f"You have been assigned task: {task.title}"
+            )
+
             return redirect('task_list')
 
     return render(request, 'tasks/create_task.html', {
@@ -95,6 +136,11 @@ def task_detail(request, pk):
 
             task.save()
 
+            ActivityLog.objects.create(
+                user=request.user,
+                action=f"Uploaded solution for task: {task.title}"
+            )
+
             return redirect('task_detail', pk=task.id)
 
     return render(request, 'tasks/task_detail.html', {
@@ -119,3 +165,75 @@ def task_api(request):
     tasks = Task.objects.all()
     serializer = TaskSerializer(tasks, many=True)
     return Response(serializer.data)
+
+@login_required
+def kanban_board(request):
+    if request.user.is_superuser or request.user.role == 'admin':
+        pending_tasks = Task.objects.filter(
+            status='pending'
+        )
+
+        in_progress_tasks = Task.objects.filter(
+            status='in_progress'
+        )
+
+        completed_tasks = Task.objects.filter(
+            status='completed'
+        )
+
+    else:
+        pending_tasks = request.user.tasks.filter(
+            status='pending'
+        )
+
+        in_progress_tasks = request.user.tasks.filter(
+            status='in_progress'
+        )
+
+        completed_tasks = request.user.tasks.filter(
+            status='completed'
+        )
+
+    return render(request, 'tasks/kanban.html', {
+        'pending_tasks': pending_tasks,
+        'in_progress_tasks': in_progress_tasks,
+        'completed_tasks': completed_tasks,
+    })
+
+@login_required
+def export_tasks_csv(request):
+    if not (request.user.is_superuser or request.user.role == 'admin'):
+        return redirect('task_list')
+
+    response = HttpResponse(
+        content_type='text/csv'
+    )
+
+    response[
+        'Content-Disposition'
+    ] = 'attachment; filename="tasks_report.csv"'
+
+    writer = csv.writer(response)
+
+    writer.writerow([
+        'Title',
+        'Project',
+        'Assigned To',
+        'Due Date',
+        'Priority',
+        'Status',
+    ])
+
+    tasks = Task.objects.all()
+
+    for task in tasks:
+        writer.writerow([
+            task.title,
+            task.project.name,
+            task.assigned_to.username,
+            task.due_date,
+            task.priority,
+            task.status,
+        ])
+
+    return response

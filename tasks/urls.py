@@ -6,6 +6,8 @@ from .views import (
     task_detail,
     delete_task,
     task_api,
+    kanban_board,
+    export_tasks_csv,
 )
 
 urlpatterns = [
@@ -15,4 +17,10 @@ urlpatterns = [
     path('detail/<int:pk>/', task_detail, name='task_detail'),
     path('delete/<int:pk>/', delete_task, name='delete_task'),
     path('api/', task_api, name='task_api'),
+    path('kanban/', kanban_board, name='kanban'),
+    path(
+        'export/csv/',
+        export_tasks_csv,
+        name='export_tasks_csv'
+    ),
 ]

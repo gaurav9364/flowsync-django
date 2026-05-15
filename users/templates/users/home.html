@@ -2,23 +2,169 @@
 
 {% block content %}
 
-<div class="text-center mt-5">
+<div class="row align-items-center" style="min-height: 80vh;">
 
-    <h1 class="page-title mb-3">
-        Team Task Manager
-    </h1>
+    <!-- LEFT SIDE -->
 
-    <p class="text-muted mb-4">
-        Manage projects, teams and tasks efficiently with role-based access
-    </p>
+    <div class="col-lg-6">
 
-    <a href="{% url 'login' %}" class="btn btn-dark me-2">
-        Login
-    </a>
+        <span class="badge bg-dark mb-3 px-3 py-2">
+            Productivity Platform for Modern Teams
+        </span>
 
-    <a href="{% url 'signup' %}" class="btn btn-outline-dark">
-        Signup
-    </a>
+        <h1 style="
+            font-size: 56px;
+            font-weight: 800;
+            line-height: 1.1;
+            letter-spacing: -2px;
+        ">
+            Manage Teams,<br>
+            Projects & Tasks<br>
+            Effortlessly
+        </h1>
+
+        <p class="mt-4 subtitle" style="font-size: 18px;">
+            A modern task management platform with project tracking,
+            role-based access, team collaboration, solution uploads,
+            analytics dashboard and enterprise workflow support.
+        </p>
+
+        <div class="mt-4 d-flex gap-3">
+
+            <a href="{% url 'signup' %}"
+               class="btn btn-dark btn-lg px-4">
+               Get Started
+            </a>
+
+            <a href="{% url 'login' %}"
+               class="btn btn-outline-dark btn-lg px-4">
+               Login
+            </a>
+
+        </div>
+
+        <div class="mt-5 d-flex gap-4">
+
+            <div>
+                <h3 class="fw-bold mb-0">10+</h3>
+                <small class="text-muted">Features</small>
+            </div>
+
+            <div>
+                <h3 class="fw-bold mb-0">100%</h3>
+                <small class="text-muted">Role-Based Access</small>
+            </div>
+
+            <div>
+                <h3 class="fw-bold mb-0">24/7</h3>
+                <small class="text-muted">Productivity</small>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- RIGHT SIDE -->
+
+    <div class="col-lg-6">
+
+        <div class="card main-card p-4">
+
+            <h4 class="fw-bold mb-4">
+                Why Choose Team Task Manager?
+            </h4>
+
+            <div class="mb-4">
+                <h6 class="fw-bold">
+                    Project Management
+                </h6>
+                <p class="text-muted mb-0">
+                    Create, edit and manage multiple projects with team assignment.
+                </p>
+            </div>
+
+            <div class="mb-4">
+                <h6 class="fw-bold">
+                    Team Collaboration
+                </h6>
+                <p class="text-muted mb-0">
+                    Add members to teams and manage access with smart permissions.
+                </p>
+            </div>
+
+            <div class="mb-4">
+                <h6 class="fw-bold">
+                    Task Workflow
+                </h6>
+                <p class="text-muted mb-0">
+                    Assign tasks, track status, upload solutions and review submissions.
+                </p>
+            </div>
+
+            <div>
+                <h6 class="fw-bold">
+                    Analytics Dashboard
+                </h6>
+                <p class="text-muted mb-0">
+                    View overdue tasks, completed work and productivity insights.
+                </p>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- FEATURES SECTION -->
+
+<div class="mt-5 pt-5">
+
+    <div class="text-center mb-5">
+        <h2 class="page-title">
+            Built for Professional Teams
+        </h2>
+        <p class="subtitle">
+            Designed to handle real-world workflows efficiently
+        </p>
+    </div>
+
+    <div class="row g-4">
+
+        <div class="col-md-4">
+            <div class="card stats-card p-4">
+                <h5 class="fw-bold">
+                    Role-Based Access
+                </h5>
+                <p class="text-muted">
+                    Secure admin/member/team workflows with full control.
+                </p>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card stats-card p-4">
+                <h5 class="fw-bold">
+                    Solution Upload
+                </h5>
+                <p class="text-muted">
+                    Members can submit files directly inside task detail pages.
+                </p>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card stats-card p-4">
+                <h5 class="fw-bold">
+                    Smart Productivity
+                </h5>
+                <p class="text-muted">
+                    Overdue detection, progress tracking and workflow optimization.
+                </p>
+            </div>
+        </div>
+
+    </div>
 
 </div>
 

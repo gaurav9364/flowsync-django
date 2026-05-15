@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="mb-4">
+    <h1 class="page-title">
+        Activity Timeline
+    </h1>
+
+    <p class="subtitle">
+        Track all important actions across the platform
+    </p>
+</div>
+
+<div class="card main-card">
+    <div class="card-body p-4">
+
+        {% for activity in activities %}
+            <div class="border-bottom pb-3 mb-3">
+
+                <h5 class="fw-bold mb-1">
+                    {{ activity.action }}
+                </h5>
+
+                <small class="text-muted">
+                    {{ activity.created_at }}
+                </small>
+
+            </div>
+
+        {% empty %}
+            <div class="text-center text-muted py-4">
+                No activity found
+            </div>
+        {% endfor %}
+
+    </div>
+</div>
+
+{% endblock %}

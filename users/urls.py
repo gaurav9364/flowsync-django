@@ -9,6 +9,8 @@ from .views import (
     logout_view,
     dashboard_view,
     profile_view,
+    notification_view,
+    activity_view,
 )
 
 urlpatterns = [
@@ -20,4 +22,6 @@ urlpatterns = [
 
     path('api/users/', user_api, name='user_api'),
     path('profile/', profile_view, name='profile'),
+    path('notifications/', notification_view, name='notifications'),
+    path('activity/', activity_view, name='activity'),
 ]
