@@ -4,13 +4,11 @@ from .models import User
 
 
 class SignupForm(UserCreationForm):
-
     admin_secret_code = forms.CharField(
-    required=False,
-    widget=forms.PasswordInput(),
-    help_text="Required only for admin account creation"
-)
-
+        required=False,
+        widget=forms.PasswordInput(),
+        help_text="Required only for admin account creation"
+    )
 
     class Meta:
         model = User
@@ -39,7 +37,22 @@ class SignupForm(UserCreationForm):
 
         return cleaned_data
 
-    
+    def save(self, commit=True):
+        user = super().save(commit=False)
+
+        role = self.cleaned_data.get("role")
+
+        if role == "admin":
+            user.role = "admin"
+            user.is_staff = True
+        else:
+            user.role = "member"
+
+        if commit:
+            user.save()
+
+        return user
+
 
 class ProfileForm(forms.ModelForm):
     class Meta:
