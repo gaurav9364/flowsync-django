@@ -12,10 +12,11 @@ This project was built as a take-home assignment for a Full Stack Developer role
 # 🌐 Live Demo
 
 ### Live URL:
-https://your-railway-live-url.up.railway.app
+flowsync-django-production.up.railway.app
 
-### Admin Panel:
-https://your-railway-live-url.up.railway.app/admin/
+### Login using admin
+username - admin
+password - admin@123
 
 ---
 
@@ -131,13 +132,6 @@ https://your-railway-live-url.up.railway.app/admin/
 - Admin Editable Fields
 - Update Tracking with History
 
----
-
-## 🔍 Search + Filters
-
-- Smart Task Filtering
-- Search by Projects / Users / Tasks
-- Better productivity workflow
 
 ---
 
