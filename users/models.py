@@ -1,3 +1,5 @@
+# users/models.py
+
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
@@ -20,7 +22,9 @@ class User(AbstractUser):
         null=True
     )
 
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(
+        auto_now_add=True
+    )
 
     updated_at = models.DateTimeField(
         auto_now=True
@@ -32,10 +36,17 @@ class User(AbstractUser):
         null=True
     )
 
+    def save(self, *args, **kwargs):
+        # Superuser should always be admin
+        if self.is_superuser:
+            self.role = 'admin'
+
+        super().save(*args, **kwargs)
+
     def __str__(self):
         return self.username
-    
-    
+
+
 class Notification(models.Model):
     user = models.ForeignKey(
         User,
@@ -59,7 +70,7 @@ class Notification(models.Model):
 
     def __str__(self):
         return self.title
-    
+
 
 class ActivityLog(models.Model):
     user = models.ForeignKey(

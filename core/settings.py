@@ -84,14 +84,24 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
-import dj_database_url
 import os
+import dj_database_url
 
-DATABASES = {
-    'default': dj_database_url.config(
-        default=os.getenv("DATABASE_URL")
-    )
-}
+DATABASE_URL = os.getenv("DATABASE_URL")
+
+if DATABASE_URL:
+    # Railway Production Database
+    DATABASES = {
+        "default": dj_database_url.parse(DATABASE_URL)
+    }
+else:
+    # Local Development Database
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db.sqlite3",
+        }
+    }
 
 
 # Password validation
