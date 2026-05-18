@@ -29,37 +29,16 @@ def signup_view(request):
         if form.is_valid():
             user = form.save()
 
-            # Ensure normal signup users are members
-            if not user.is_superuser:
-                user.role = 'member'
-                user.save()
-
-            # Notification
-            Notification.objects.create(
-                user=user,
-                title="Welcome to FlowSync",
-                message="Your account has been created successfully."
-            )
-
-            # Activity Log
-            ActivityLog.objects.create(
-                user=user,
-                action=f"Account created for {user.username}"
-            )
-
             login(request, user)
             return redirect('dashboard')
 
         else:
-            messages.error(
-                request,
-                "Signup failed. Please check username/email/password."
-            )
+            print("FORM ERRORS:", form.errors)
+            print("NON FIELD ERRORS:", form.non_field_errors())
 
     return render(request, 'users/signup.html', {
         'form': form
     })
-
 
 class CustomLoginView(LoginView):
     template_name = 'users/login.html'
